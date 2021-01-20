@@ -19,6 +19,9 @@ except:
 
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+    return 'Hello from heroku'
 
 @app.route('/api')
 def api():
