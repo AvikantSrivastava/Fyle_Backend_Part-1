@@ -127,4 +127,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-Credentials.txt
+Credentials.env
