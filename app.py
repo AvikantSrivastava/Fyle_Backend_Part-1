@@ -81,7 +81,7 @@ def auto_branch():
     try:
         limit = request.args['limit']
     except:
-        limit = 0
+        limit = 5
 
     try:
         offset = request.args['offset']
@@ -100,7 +100,7 @@ def branch():
     try:
         limit = request.args['limit']
     except:
-        limit = 0
+        limit = 5
 
     try:
         offset = request.args['offset']
