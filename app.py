@@ -1,6 +1,8 @@
 import os
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import psycopg2
+from psycopg2.extras import RealDictCursor
+import json
 from flask_cors import CORS
 
 db_host = os.environ['POSTGRESQL_ADDON_HOST']
@@ -17,6 +19,22 @@ except:
     print("Not able to connect to Database")
 
 
+def autocomplete(keyword, limit, offset):
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql_query = f'''select
+                   *
+                   from
+                   branches
+                   where
+                   branch like '%{keyword}%'
+                   order by ifsc
+                   limit {limit} ; '''
+    cursor.execute(sql_query)
+    record = cursor.fetchall()
+
+    return record
+
+
 app = Flask(__name__)
 
 
@@ -28,7 +46,7 @@ def home():
 @app.route('/api/branches/autocomplete')
 def api():
     search_query = request.args['q']
-    
+
     try:
         limit = request.args['limit']
     except:
@@ -38,8 +56,10 @@ def api():
         offset = request.args['offset']
     except:
         offset = 0
+    data = {}
+    data["branches"] = autocomplete(search_query,limit,offset)
 
-    return f'API is working \n {search_query} {limit} {offset}'
+    return jsonify(data)
 
 
 if __name__ == "__main__":
