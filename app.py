@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, request
 import psycopg2
 from flask_cors import CORS
 
@@ -19,13 +19,27 @@ except:
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def home():
     return 'Hello from heroku'
 
-@app.route('/api')
+
+@app.route('/api/branches/autocomplete')
 def api():
-    return 'API is working'
+    search_query = request.args['q']
+    
+    try:
+        limit = request.args['limit']
+    except:
+        limit = 0
+
+    try:
+        offset = request.args['offset']
+    except:
+        offset = 0
+
+    return f'API is working \n {search_query} {limit} {offset}'
 
 
 if __name__ == "__main__":
