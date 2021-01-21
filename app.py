@@ -35,7 +35,34 @@ def autocomplete(keyword, limit, offset):
     return record
 
 
+def getBranch(keyword, limit, offset):
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql_query = f'''
+                    select
+                *
+                from
+                branches
+                where
+                address like '%{keyword}%'
+                or branch like '%{keyword}%'
+                or city like '%{keyword}%'
+                or district like '%{keyword}%'
+                or state like '%{keyword}%'
+                
+                order by
+                ifsc
+                limit
+                {limit} 
+                offset {offset};
+            '''
+    cursor.execute(sql_query)
+    record = cursor.fetchall()
+
+    return record
+
+
 app = Flask(__name__)
+app.config['JSON_SORT_KEYS'] = False
 
 
 @app.route('/')
@@ -44,7 +71,7 @@ def home():
 
 
 @app.route('/api/branches/autocomplete')
-def api():
+def auto_branch():
     search_query = request.args['q']
 
     try:
@@ -57,7 +84,26 @@ def api():
     except:
         offset = 0
     data = {}
-    data["branches"] = autocomplete(search_query,limit,offset)
+    data["branches"] = autocomplete(search_query.upper(), limit, offset)
+
+    return jsonify(data)
+
+
+@app.route('/api/branches')
+def branch():
+    search_query = request.args['q']
+
+    try:
+        limit = request.args['limit']
+    except:
+        limit = 0
+
+    try:
+        offset = request.args['offset']
+    except:
+        offset = 0
+    data = {}
+    data["branches"] = getBranch(search_query.upper(), limit, offset)
 
     return jsonify(data)
 
