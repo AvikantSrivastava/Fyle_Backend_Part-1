@@ -65,9 +65,13 @@ app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 
 
-@app.route('/')
-def home():
-    return 'Hello from heroku'
+@app.errorhandler(404)
+def not_found(e):
+    return '''
+            <h1>bad request!</h1> 
+            Endpoint: /api/branches?q=<>
+            Endpoint: /api/branches/autocomplete?q=<>
+            ''', 400
 
 
 @app.route('/api/branches/autocomplete')
