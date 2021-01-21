@@ -2,8 +2,8 @@
 
 ## Task List
 - [X] Setup Flask Server
-- [ ] Setup Credentials in Environment variable
-- [ ] Setup Database Connection
-- [ ] Work on API
-- [ ] API Testing
-- [ ] Heroku Deployment
+- [X] Setup Credentials in Environment variable
+- [X] Setup Database Connection
+- [X] Work on API
+- [X] API Testing
+- [X] Heroku Deployment
