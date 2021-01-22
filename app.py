@@ -62,6 +62,7 @@ def getBranch(keyword, limit, offset):
 
 
 app = Flask(__name__)
+CORS(app)
 app.config['JSON_SORT_KEYS'] = False
 
 
